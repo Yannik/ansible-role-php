@@ -35,3 +35,8 @@
   command: >
     {{ php_package_prefix }} -r "new DomDocument();"
   changed_when: False
+
+- name: Check intl extension
+  command: >
+    {{ php_package_prefix }} -r "collator_create('de_DE');"
+  changed_when: False
