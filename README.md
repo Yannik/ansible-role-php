@@ -1,6 +1,8 @@
 Description
 =========
 
+[![Build Status](https://travis-ci.org/Yannik/ansible-role-php.svg?branch=master)](https://travis-ci.org/Yannik/ansible-role-php)
+
 This role allows you to install php 5.6 and/or php 7.0 on ubuntu trusty and debian jessie.
 
 Requirements
