@@ -1,0 +1,34 @@
+- name: Install php ({{ php_package_prefix }})
+  apt: pkg={{ php_package_prefix }}-{{ item }} state=present
+  with_items:
+    - "cli"
+    - "mysql"
+    - "sqlite*" #php5-sqlite, but php7.0-sqlite3
+    - "fpm"
+    - "readline"
+    - "curl"
+    - "json"
+    - "intl" # (required for Collator class)
+    - "gd" # (required for piwik email reports)
+    - "tidy" # (currently required for intranets)
+    - "mcrypt"
+    - "zip" # zip_open()
+    - "mbstring" # mb_strlen() etc.
+    - "xml" # required for roundcube
+  when: ansible_distribution != 'Debian' or item not in ['zip', 'mbstring', 'xml']
+#  notify: Reload apache, php-fpm
+
+- name: Check zip extension
+  command: >
+    {{ php_package_prefix }} -r "zip_open('test');"
+  changed_when: False
+
+- name: Check mbstring extension
+  command: >
+    {{ php_package_prefix }} -r "mb_strlen('test');"
+  changed_when: False
+
+- name: Check xml extension
+  command: >
+    {{ php_package_prefix }} -r "new DomDocument();"
+  changed_when: False

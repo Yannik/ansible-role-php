@@ -1,0 +1,48 @@
+- name: Add dotdeb repo
+  copy: src=dotdeb.list dest=/etc/apt/sources.list.d/dotdeb.list
+  register: dotdeb_repo
+  when: ansible_distribution == 'Debian'
+
+- name: Install DotDeb key
+  apt_key: url=https://www.dotdeb.org/dotdeb.gpg
+  when: ansible_distribution == 'Debian'
+
+- name: Update apt cache
+  apt: update_cache=yes
+  when: dotdeb_repo.changed
+
+- name: Install ppa:ondrej/php
+  apt_repository: repo="ppa:ondrej/php" state={{ 'present' if '7.0' in php_install_versions else 'absent'}}
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install php5.6 (debian / ubuntu default-php-only)
+  include: php-packages.yml php_package_prefix=php5
+  when: (ansible_distribution == 'Debian' and '5.6' in php_install_versions) or
+        (ansible_distribution == 'Ubuntu' and '7.0' not in php_install_versions)
+
+- name: Install php5.6 (ubuntu)
+  include: php-packages.yml php_package_prefix=php5.6
+  when: ansible_distribution == 'Ubuntu' and '5.6' in php_install_versions and
+        '7.0' in php_install_versions
+
+- name: Install php7.0
+  include: php-packages.yml php_package_prefix=php7.0
+  when: >
+    '7.0' in php_install_versions
+
+- name: Set default cli version
+  alternatives: name=php path=/usr/bin/{{ (php_default_cli_version == '5.6' and (ansible_distribution == 'Debian' or (ansible_distribution == 'Ubuntu' and '7.0' not in php_install_versions))) | ternary('php5', 'php' + php_default_cli_version) }}
+
+# Fix https://github.com/oerdnj/deb.sury.org/issues/266
+- name: Disable php*-fpm apache config
+  command: a2disconf {{ item }}
+  with_items:
+    - php5.6-fpm
+    - php7.0-fpm
+  changed_when: False
+  failed_when: False
+
+- name: Install composer
+  shell:
+    curl -sS https://getcomposer.org/installer | /usr/bin/php -- --install-dir=/usr/local/bin && /bin/mv -f /usr/local/bin/composer.phar /usr/local/bin/composer
+    creates=/usr/local/bin/composer
