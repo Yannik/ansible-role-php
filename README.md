@@ -12,11 +12,11 @@ Role Variables
 --------------
 
 * `php_install_versions`: List of php versions to install
-    Default: `['5.6', '7.0']
-    Possible values: `'5.6'`, `'7.0'`
+    * Default: `['5.6', '7.0']`
+    * Possible values: `'5.6'`, `'7.0'`
 * `php_default_cli_version`:
-    Default: `'5.6'`
-    Possible values: `'5.6'`, `'7.0'`
+    * Default: `'5.6'`
+    * Possible values: `'5.6'`, `'7.0'`
 
 
 Example Playbook
