@@ -1,3 +1,7 @@
+# The postinst triggers of these packages reload/restart apache
+# and php-fpm themselves (php7.0-xx restarts php7.0-fpm, php5-xx
+# restarts php5-fpm etc.)
+# Therefore we need no additional restart handler
 - name: Install php ({{ php_package_prefix }})
   apt: pkg={{ php_package_prefix }}-{{ item }} state=present
   with_items:
@@ -16,7 +20,6 @@
     - "mbstring" # mb_strlen() etc.
     - "xml" # required for roundcube
   when: ansible_distribution != 'Debian' or item not in ['zip', 'mbstring', 'xml']
-#  notify: Reload apache, php-fpm
 
 - name: Check zip extension
   command: >
