@@ -14,7 +14,7 @@ Role Variables
 * `php_install_versions`: List of php versions to install
     * Default: `['5.6', '7.0']`
     * Possible values: `'5.6'`, `'7.0'`
-* `php_default_cli_version`:
+* `php_default_cli_version`: The default php version for the `php` command
     * Default: `'5.6'`
     * Possible values: `'5.6'`, `'7.0'`
 
