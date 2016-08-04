@@ -19,7 +19,7 @@
     - "zip" # zip_open()
     - "mbstring" # mb_strlen() etc.
     - "xml" # required for roundcube
-  when: ansible_distribution != 'Debian' or item not in ['zip', 'mbstring', 'xml']
+  when: php_package_prefix != 'php5' or item not in ['zip', 'mbstring', 'xml']
 
 - name: Check zip extension
   command: >
