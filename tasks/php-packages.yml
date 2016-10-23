@@ -16,6 +16,7 @@
     - "gd" # (required for piwik email reports)
     - "tidy" # (currently required for intranets)
     - "mcrypt"
+    - "imap" # required for postfixadmin
     - "zip" # zip_open()
     - "mbstring" # mb_strlen() etc.
     - "xml" # required for roundcube
