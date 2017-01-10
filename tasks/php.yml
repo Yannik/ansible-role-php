@@ -1,10 +1,16 @@
-- name: Add dotdeb repo
-  copy: src=dotdeb.list dest=/etc/apt/sources.list.d/dotdeb.list
+- name: Install apt-transport-https required for sury repo
+  apt: pkg=apt-transport-https state=present
+
+- name: Add sury repo
+  copy: src=sury-php.list dest=/etc/apt/sources.list.d/sury-php.list
   register: dotdeb_repo
   when: ansible_distribution == 'Debian'
 
-- name: Install DotDeb key
-  apt_key: url=https://www.dotdeb.org/dotdeb.gpg
+- name: Remove old dotdeb repo
+  file: path=/etc/apt/sources.list.d/dotdeb.list state=absent
+
+- name: Install sury gpg key
+  apt_key: url=https://packages.sury.org/php/apt.gpg
   when: ansible_distribution == 'Debian'
 
 - name: Update apt cache
