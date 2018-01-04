@@ -20,7 +20,7 @@
     - "zip" # zip_open()
     - "mbstring" # mb_strlen() etc.
     - "xml" # required for roundcube
-  when: php_package_prefix != 'php5' or item not in ['zip', 'mbstring', 'xml']
+  when: php_version | version_compare('7.2', '<') or item != 'mcrypt'
 
 - name: Check zip extension
   command: >

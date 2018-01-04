@@ -18,21 +18,14 @@
   apt_repository: repo="ppa:ondrej/php" state=present
   when: ansible_distribution == 'Ubuntu'
 
-- name: Install php5.6 (debian default-php)
-  include: php-packages.yml php_package_prefix=php5
-  when: (ansible_distribution == 'Debian' and '5.6' in php_install_versions)
-
-- name: Install php5.6 (ubuntu)
-  include: php-packages.yml php_package_prefix=php5.6
-  when: ansible_distribution == 'Ubuntu' and '5.6' in php_install_versions
-
-- name: Install php7.0
-  include: php-packages.yml php_package_prefix=php7.0
-  when: >
-    '7.0' in php_install_versions
+- name: Install php
+  include: php-packages.yml php_package_prefix=php{{ php_version }}
+  with_items: "{{ php_install_versions }}"
+  loop_control:
+    loop_var: php_version
 
 - name: Set default cli version
-  alternatives: name=php path=/usr/bin/{{ (php_default_cli_version == '5.6' and (ansible_distribution == 'Debian')) | ternary('php5', 'php' + php_default_cli_version) }}
+  alternatives: name=php path=/usr/bin/{{ 'php' + php_default_cli_version }}
 
 # Fix https://github.com/oerdnj/deb.sury.org/issues/266
 - name: Disable php*-fpm apache config
