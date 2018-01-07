@@ -16,7 +16,7 @@ before_install:
 
   # upgrade libpcre3 (see https://github.com/oerdnj/deb.sury.org/issues/755)
   - sudo add-apt-repository -y ppa:ondrej/php
-  - sudo apt-get install libpcre3
+  - sudo apt-get install libpcre3 libpcre16-3 libpcre32-3 libpcre3-dev
 
 install:
   # Install ansible
