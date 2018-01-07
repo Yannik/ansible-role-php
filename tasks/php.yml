@@ -19,7 +19,7 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install php
-  include: php-packages.yml php_package_prefix=php{{ php_version }}
+  include_tasks: php-packages.yml php_package_prefix=php{{ php_version }}
   with_items: "{{ php_install_versions }}"
   loop_control:
     loop_var: php_version
