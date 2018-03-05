@@ -99,10 +99,7 @@ galaxy_info:
   #  - quantal
   #  - raring
   #  - saucy
-    - trusty
-    - utopic
-    - vivid
-    - wily
+    - xenial
   #- name: SLES
   #  versions:
   #  - all
@@ -124,7 +121,7 @@ galaxy_info:
     versions:
   #  - all
   #  - etch
-    - jessie
+    - stretch
   #  - lenny
   #  - squeeze
   #  - wheezy
