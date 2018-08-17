@@ -4,40 +4,17 @@
 # Therefore we need no additional restart handler
 - name: Install php ({{ php_package_prefix }})
   apt: pkg={{ php_package_prefix }}-{{ item }} state=present
-  with_items:
-    - "cli"
-    - "mysql"
-    - "sqlite*" #php5-sqlite, but php7.0-sqlite3
-    - "fpm"
-    - "readline"
-    - "curl"
-    - "json"
-    - "intl" # (required for Collator class)
-    - "gd" # (required for piwik email reports)
-    - "tidy" # (currently required for intranets)
-    - "mcrypt"
-    - "imap" # required for postfixadmin
-    - "zip" # zip_open()
-    - "mbstring" # mb_strlen() etc.
-    - "xml" # required for roundcube
+  with_items: "{{ php_packages }}"
   when: php_version | version_compare('7.2', '<') or item != 'mcrypt'
 
-- name: Check zip extension
-  command: >
-    {{ php_package_prefix }} -r "zip_open('test');"
-  changed_when: False
+- import_tasks: packages/zip.yml
+  when: "'zip' in php_packages"
 
-- name: Check mbstring extension
-  command: >
-    {{ php_package_prefix }} -r "mb_strlen('test');"
-  changed_when: False
+- import_tasks: packages/mbstring.yml
+  when: "'mbstring' in php_packages"
 
-- name: Check xml extension
-  command: >
-    {{ php_package_prefix }} -r "new DomDocument();"
-  changed_when: False
+- import_tasks: packages/xml.yml
+  when: "'xml' in php_packages"
 
-- name: Check intl extension
-  command: >
-    {{ php_package_prefix }} -r "collator_create('de_DE');"
-  changed_when: False
+- import_tasks: packages/intl.yml
+  when: "'intl' in php_packages"

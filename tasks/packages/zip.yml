@@ -1,0 +1,5 @@
+- name: Check zip extension
+  command: >
+    {{ php_package_prefix }} -r "zip_open('test');"
+  changed_when: False
+

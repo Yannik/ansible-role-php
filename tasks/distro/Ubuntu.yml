@@ -1,0 +1,4 @@
+- name: Install ppa:ondrej/php
+  apt_repository: repo="ppa:ondrej/php" state=present
+  when: php_install_versions != ['7.0']
+

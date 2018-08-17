@@ -1,21 +1,10 @@
 - name: Install apt-transport-https required for sury repo
   apt: pkg=apt-transport-https state=present
 
-- name: Add sury repo
-  template: src=sury-php.list dest=/etc/apt/sources.list.d/sury-php.list
-  register: dotdeb_repo
+- import_tasks: distro/Debian.yml
   when: ansible_distribution == 'Debian'
 
-- name: Install sury gpg key
-  apt_key: url=https://packages.sury.org/php/apt.gpg
-  when: ansible_distribution == 'Debian'
-
-- name: Update apt cache
-  apt: update_cache=yes
-  when: dotdeb_repo.changed
-
-- name: Install ppa:ondrej/php
-  apt_repository: repo="ppa:ondrej/php" state=present
+- import_tasks: distro/Ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install php
@@ -26,15 +15,6 @@
 
 - name: Set default cli version
   alternatives: name=php path=/usr/bin/{{ 'php' + php_default_cli_version }}
-
-# Fix https://github.com/oerdnj/deb.sury.org/issues/266
-- name: Disable php*-fpm apache config
-  command: a2disconf {{ item }}
-  with_items:
-    - php5.6-fpm
-    - php7.0-fpm
-  changed_when: False
-  failed_when: False
 
 - name: Install curl for composer installation
   apt: pkg=curl state=present

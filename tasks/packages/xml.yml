@@ -1,0 +1,5 @@
+- name: Check xml extension
+  command: >
+    {{ php_package_prefix }} -r "new DomDocument();"
+  changed_when: False
+

@@ -1,0 +1,13 @@
+- name: Add sury repo
+  template: src=sury-php.list dest=/etc/apt/sources.list.d/sury-php.list
+  register: dotdeb_repo
+  when: php_install_versions != ['7.0']
+
+- name: Install sury gpg key
+  apt_key: url=https://packages.sury.org/php/apt.gpg
+  when: php_install_versions != ['7.0']
+
+- name: Update apt cache
+  apt: update_cache=yes
+  when: dotdeb_repo.changed
+

@@ -1,0 +1,5 @@
+- name: Check mbstring extension
+  command: >
+    {{ php_package_prefix }} -r "mb_strlen('test');"
+  changed_when: False
+
