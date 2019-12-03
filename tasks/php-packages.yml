@@ -5,7 +5,7 @@
 - name: Install php ({{ php_package_prefix }})
   apt: pkg={{ php_package_prefix }}-{{ item }} state=present
   with_items: "{{ php_packages }}"
-  when: php_version | version_compare('7.2', '<') or item != 'mcrypt'
+  when: php_version is version('7.2', '<') or item != 'mcrypt'
 
 - import_tasks: packages/zip.yml
   when: "'zip' in php_packages"
