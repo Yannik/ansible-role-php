@@ -4,7 +4,9 @@
   when: php_install_versions != ['7.0']
 
 - name: Install sury gpg key
-  apt_key: url=https://packages.sury.org/php/apt.gpg
+  apt_key:
+    url: https://packages.sury.org/php/apt.gpg
+    keyring: /etc/apt/trusted.gpg.d/sury-php.gpg
   when: php_install_versions != ['7.0']
 
 - name: Update apt cache
