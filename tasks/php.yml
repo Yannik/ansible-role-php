@@ -1,22 +1,20 @@
 - name: Install apt-transport-https required for sury repo
   apt: pkg=apt-transport-https state=present
 
-- import_tasks: distro/Debian.yml
-  when: ansible_distribution == 'Debian'
+- include_vars: "{{ ansible_distribution }}_{{ansible_distribution_version}}.yml"
 
-- import_tasks: distro/Ubuntu.yml
-  when: ansible_distribution == 'Ubuntu'
+- include_tasks: "distro/{{ ansible_distribution }}.yml"
 
 - name: Install php
   include_tasks: php-packages.yml
   vars:
     php_package_prefix: php{{ php_version }}
-  with_items: "{{ php_install_versions }}"
+  with_items: "{{ php_install_versions|default(_php_install_version) }}"
   loop_control:
     loop_var: php_version
 
 - name: Set default cli version
-  alternatives: name=php path=/usr/bin/{{ 'php' + php_default_cli_version }}
+  alternatives: name=php path=/usr/bin/{{ 'php' + php_default_cli_version|default(_php_default_cli_version) }}
 
 - name: Install curl for composer installation
   apt: pkg=curl state=present
