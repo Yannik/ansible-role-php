@@ -9,7 +9,7 @@
   include_tasks: php-packages.yml
   vars:
     php_package_prefix: php{{ php_version }}
-  with_items: "{{ php_install_versions|default(_php_install_version) }}"
+  with_items: "{{ php_install_versions|default(_php_install_versions) }}"
   loop_control:
     loop_var: php_version
 
