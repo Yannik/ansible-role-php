@@ -1,13 +1,15 @@
 - name: Add sury repo
   template: src=sury-php.list dest=/etc/apt/sources.list.d/sury-php.list
   register: dotdeb_repo
-  when: php_install_versions|default(_php_install_versions) != _php_install_versions
+  when: php_install_versions|default(_php_install_versions) != _php_install_versions and
+        ansible_architecture != "armv6l" # NEVER on raspbian!
 
 - name: Install sury gpg key
   apt_key:
     url: https://packages.sury.org/php/apt.gpg
     keyring: /etc/apt/trusted.gpg.d/sury-php.gpg
-  when: php_install_versions|default(_php_install_versions) != _php_install_versions
+  when: php_install_versions|default(_php_install_versions) != _php_install_versions and
+        ansible_architecture != "armv6l" # NEVER on raspbian!
 
 - name: Update apt cache
   apt: update_cache=yes
