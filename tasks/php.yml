@@ -1,7 +1,7 @@
 - name: Install apt-transport-https required for sury repo
   apt: pkg=apt-transport-https state=present
 
-- include_vars: "{{ ansible_distribution }}_{{ansible_distribution_version}}.yml"
+- include_vars: "{{ ansible_distribution }}_{{ansible_distribution_major_version}}.yml"
 
 - include_tasks: "distro/{{ ansible_distribution }}.yml"
 
