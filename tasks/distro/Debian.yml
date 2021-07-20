@@ -10,8 +10,9 @@
     keyring: /etc/apt/trusted.gpg.d/sury-php.gpg
   when: php_install_versions|default(_php_install_versions) != _php_install_versions and
         ansible_architecture != "armv6l" # NEVER on raspbian!
+  register: sury_gpg_key
 
 - name: Update apt cache
   apt: update_cache=yes
-  when: dotdeb_repo.changed
+  when: dotdeb_repo is changed or sury_gpg_key is changed
 
