@@ -1,3 +1,7 @@
+- name: Install gnupg2
+  apt:
+    pkg: gnupg2
+
 - name: Add sury repo
   template: src=sury-php.list dest=/etc/apt/sources.list.d/sury-php.list
   register: dotdeb_repo
