@@ -15,3 +15,4 @@ default_php_packages:
     - "mbstring" # mb_strlen() etc.
     - "xml" # required for roundcube
 php_packages: "{{ default_php_packages }}"
+php_composer_install_opts: ""
