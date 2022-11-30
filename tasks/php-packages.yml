@@ -1,17 +1,35 @@
+- file:
+    path: "/etc/systemd/system/php{{ php_version }}-fpm.service.d"
+    state: directory
+  changed_when: false
+
+- copy:
+    content: |
+      [Unit]
+      StartLimitIntervalSec=0
+    dest: /etc/systemd/system/php{{ php_version }}-fpm.service.d/disable-start-limit.conf
+  changed_when: false
+
+# No need to actually restart the service, systemd reload is renough to apply the new limit
+- systemd:
+    daemon_reload: yes
+
 # The postinst triggers of these packages reload/restart apache
 # and php-fpm themselves (php7.0-xx restarts php7.0-fpm, php5-xx
 # restarts php5-fpm etc.)
 # Therefore we need no additional restart handler
-#- name: Install php ({{ php_package_prefix }})
-#  apt: pkg={{ php_package_prefix }}-{{ item }} state=present
-#  with_items: "{{ php_packages }}"
-#  when: php_version is version('8.0', '<') or item != 'json'
+- name: Install php ({{ php_package_prefix }})
+  apt: pkg={{ php_package_prefix }}-{{ item }} state=present
+  with_items: "{{ php_packages }}"
+  when: php_version is version('8.0', '<') or item != 'json'
 
-- name: Install packages, 5 per batch
-  include_tasks: php-packages-batch.yml
-  loop_control:
-    loop_var: php_packages_batch
-  loop: "{{ php_packages|batch(5) }}"
+- file:
+    path: /etc/systemd/system/php{{ php_version }}-fpm.service.d/disable-start-limit.conf
+    state: absent
+  changed_when: false
+
+- systemd:
+    daemon_reload: yes
 
 - import_tasks: packages/zip.yml
   when: "'zip' in php_packages"
