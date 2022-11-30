@@ -2,9 +2,16 @@
 # and php-fpm themselves (php7.0-xx restarts php7.0-fpm, php5-xx
 # restarts php5-fpm etc.)
 # Therefore we need no additional restart handler
-- name: Install php ({{ php_package_prefix }})
-  apt: pkg={{ php_package_prefix }}-{{ item }} state=present
-  with_items: "{{ php_packages }}"
+#- name: Install php ({{ php_package_prefix }})
+#  apt: pkg={{ php_package_prefix }}-{{ item }} state=present
+#  with_items: "{{ php_packages }}"
+#  when: php_version is version('8.0', '<') or item != 'json'
+
+- name: Install packages, 5 per batch
+  include_tasks: php-packages-batch.yml
+  loop_control:
+    loop_var: php_packages_batch
+  loop: "{{ php_packages|batch(5) }}"
 
 - import_tasks: packages/zip.yml
   when: "'zip' in php_packages"
