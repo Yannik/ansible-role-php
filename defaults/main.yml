@@ -5,7 +5,7 @@ default_php_packages:
     - "fpm"
     - "readline"
     - "curl"
-    - "json"
+    - "json" # NOTE: json is not an extension anymore in PHP 8.0, but always included in php
     - "intl" # (required for Collator class)
     - "gd" # (required for piwik email reports)
     - "tidy" # (currently required for intranets)
