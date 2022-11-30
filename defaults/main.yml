@@ -1,7 +1,7 @@
 default_php_packages:
     - "cli"
     - "mysql"
-    - "sqlite*" #php5-sqlite, but php7.0-sqlite3
+    - "sqlite3"
     - "fpm"
     - "readline"
     - "curl"
@@ -9,7 +9,6 @@ default_php_packages:
     - "intl" # (required for Collator class)
     - "gd" # (required for piwik email reports)
     - "tidy" # (currently required for intranets)
-    - "mcrypt"
     - "imap" # required for postfixadmin
     - "zip" # zip_open()
     - "mbstring" # mb_strlen() etc.
