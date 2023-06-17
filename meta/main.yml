@@ -121,7 +121,8 @@ galaxy_info:
     versions:
   #  - all
   #  - etch
-    - stretch
+    - bullseye
+    - bookworm
   #  - lenny
   #  - squeeze
   #  - wheezy
