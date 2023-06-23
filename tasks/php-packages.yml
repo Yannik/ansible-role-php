@@ -1,9 +1,11 @@
-- file:
+- name: Temporary disable systemd StartLimitInterval - create directory
+  file:
     path: "/etc/systemd/system/php{{ php_version }}-fpm.service.d"
     state: directory
   changed_when: false
 
-- copy:
+- name: Temporary disable systemd StartLimitInterval - create config
+  copy:
     content: |
       [Unit]
       StartLimitIntervalSec=0
@@ -11,7 +13,8 @@
   changed_when: false
 
 # No need to actually restart the service, systemd reload is renough to apply the new limit
-- systemd:
+- name: Temporary disable systemd StartLimitInterval - reload systemd
+  systemd:
     daemon_reload: yes
 
 # The postinst triggers of these packages reload/restart apache
@@ -23,12 +26,14 @@
   with_items: "{{ php_packages }}"
   when: php_version is version('8.0', '<') or item != 'json'
 
-- file:
+- name: Temporary disable systemd StartLimitInterval - delete config
+  file:
     path: /etc/systemd/system/php{{ php_version }}-fpm.service.d/disable-start-limit.conf
     state: absent
   changed_when: false
 
-- systemd:
+- name: Temporary disable systemd StartLimitInterval - reload systemd
+  systemd:
     daemon_reload: yes
 
 - import_tasks: packages/zip.yml
